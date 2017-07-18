@@ -9,14 +9,18 @@ File Brief: the python code in this file is designed to automate the post-proces
 			5)save plottings
 			6)extract data from a line
 			7)save extracted data
+			
 Reference:  https://www.paraview.org/ParaView/Doc/Nightly/www/py-doc/paraview.simple.html
 			https://www.paraview.org/Wiki/ParaView_and_Python
+			https://www.paraview.org/Wiki/images/f/f7/ParaViewTutorial51.pdf
+			
 Notes:	1)When running this file through Paraview by Tools->Python Shell, the working path
 		  is NOT going to be the folder contains this file. It is critical to set the working 
 		  path correctly to avoid errors.
 		2)An alternative to bypass this issue is to run the file by directly launching the
 		  python shell. It is necessary to put the directory of the shell into environment
 		  path
+		  
 Author: Wei Tian, Wei.Tian@Schneider-Electric.com
 Last Update: 7/18/2017
 
