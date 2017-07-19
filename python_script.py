@@ -35,8 +35,70 @@ import os
 #import sys to terminate the program
 import sys
 #change path to the folder
-os.chdir("C:\Users/sesa461392/Desktop/Codes/FFD-C/Case-Studies/Energy-Balance-Study-CoarseGrid/Coarse-IM-CHEN/")
-#print (os.getcwd())
+os.chdir("C:/Users/sesa461392/Desktop/Codes/Paraview-Script")
+print (os.getcwd())
+
+#############################################################
+# function brief: cut a surface, a set up the view direction
+# Reference: http://public.kitware.com/pipermail/paraview/2014-September/032160.html
+# Last Update: 7/19/2017
+#############################################################
+def slice(object,origin,normal):
+	slice = Slice(Input = object)
+	slice.SliceType = 'Plane'
+	slice.SliceOffsetValues = [0.0]
+	slice.SliceType.Origin = origin
+	slice.SliceType.Normal = normal
+	#unclick the check box
+	Hide3DWidgets(proxy=slice.SliceType)
+
+	#set view direction
+	view = GetActiveView()
+	if not view:
+    # When using the ParaView UI, the View will be present, not otherwise.
+		view = CreateRenderView()
+	view.CameraViewUp = [0, 0, 1]
+	view.CameraFocalPoint = [0.5, 0.5, 0.5]
+	view.CameraPosition = [0.5, -3, 0.5]
+	view.CameraViewAngle = 45
+	Show()
+	Render()
+	return slice
+	
+def plane_plot(object):
+	pass
+
+#############################################################
+# save_plot: save the screen shot
+# Reference: https://www.paraview.org/Wiki/ParaView/Python/Screenshot
+# Last Update: 7/19/2017
+#############################################################
+def save_plot(object):
+	#position camera
+	view = GetActiveView()
+
+	#draw the object
+	Show()
+	#set the background color
+	view.Background = [1,1,1]  #white
+	#set image size
+	view.ViewSize = [200, 300] #[width, height]
+	dp = GetDisplayProperties()
+	#set point color
+	dp.AmbientColor = [1, 0, 0] #red
+	#set surface color
+	dp.DiffuseColor = [0, 1, 0] #blue
+	#set point size
+	dp.PointSize = 2
+	#set representation
+	dp.Representation = "Surface"
+	Render()
+	#save screenshot
+	WriteImage("test.png")
+
+
+
+
 
 #load the data file, in our case, is VTK.
 #for other files, find compatible readers below:
@@ -47,7 +109,9 @@ My_Data = LegacyVTKReader(FileNames=["result.vtk"])
 Show(My_Data)
 
 #Cut a surfaces and customize it
-
+origin = [0.5, 0.5, 0.5]
+normal = [0.0, 1.0, 0.0]
+slice (My_Data,origin, normal)
 #2-D plottings, like contour, vector, streamlines and save it
 
 #extract data along a line
@@ -59,12 +123,5 @@ Render()
 Hide(My_Data)
 
 # hold the vtk gui
-input()
-
-#close paraview
-try:
-	sys.exit()
-except:
-	print ("cannot terminate the program")
-
+#input()
 
