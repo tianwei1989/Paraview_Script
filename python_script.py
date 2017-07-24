@@ -44,7 +44,7 @@ os.chdir("C:/Users/sesa461392/Desktop/Codes/Paraview-Script")
 #print (os.getcwd())
 class FFD_Postprocess(object):
 	def __init__(self):
-                #size of the geometry
+                #size of the simulation
                 self.Lx = 1.0
                 self.Ly = 1.0
                 self.Lz = 1.0
@@ -61,6 +61,8 @@ class FFD_Postprocess(object):
 		self.str_res = 200
 		self.str_len = 2
 		self.str_seed = [[0.0, 0.5, 0.0],[1.0, 0.5, 1.0]]
+		#extract a line
+		self.name_position = {'P1':[[0.5, 0.5, 0.0],[0.5, 0.5, 1.0]]}
         #############################################################
         # function brief: set up the camera
         #############################################################
@@ -224,13 +226,51 @@ class FFD_Postprocess(object):
                 Save the streamline
                 '''
                 self.save_plot(self.width,self.height,'Vel_Str')
+
+                return streamTracer1
                 
         #############################################################
         # function brief: extract a line in a 2-D plane and save
         #                 data into a csv file
         #############################################################
-        def extract_line(object):
-                pass
+        def extract_line(self, my_slice, my_stream_trace):
+                #position camera
+                view = GetActiveView()
+                #hide streamline
+                Hide(my_stream_trace, view)
+                #set slice as active source
+                SetActiveSource(my_slice)
+                #display it
+                Show(my_slice,view)
+                #create a new 'Plot Over Line'
+                # init the 'High Resolution Line Source' selected for 'Source'
+                plotOverLine1 = PlotOverLine(Input=my_slice,Source='High Resolution Line Source')
+                #Loop all the points stored in the dictionary
+                for key in self.name_position:
+                        plotOverLine1.Source.Point1 = self.name_position['P1'][0]
+                        plotOverLine1.Source.Point2 = self.name_position['P1'][1]
+                        # get layout
+                        layout1 = GetLayout()
+                        # Create a new 'Line Chart View'
+                        # This is going to be current active view
+                        lineChartView1 = CreateView('XYChartView')
+                        lineChartView1.ViewSize = [463, 813]
+                        lineChartView1.LeftAxisRangeMaximum = 6.66
+                        lineChartView1.BottomAxisRangeMaximum = 6.66
+                        # place view in the layout
+                        layout1.AssignView(2, lineChartView1)
+                        # show data in view
+                        plotOverLine2Display = Show(plotOverLine1, lineChartView1)
+                        #save data into a csv file
+                        SaveData(key+'.csv', proxy=plotOverLine1)
+                        # close the view
+                        Delete(lineChartView1)
+                        del lineChartView1
+                        # close an empty frame
+                        layout1.Collapse(2)
+                        # find view
+                        renderView8 = FindViewOrCreate('RenderView1', viewtype='RenderView')
+                        SetActiveView(renderView8)
 
         #############################################################
         # function brief: save the screen shot, i.e. contour, vector
@@ -254,7 +294,7 @@ class FFD_Postprocess(object):
 '''
 Note: other than a bug (interactive) mode, !=  should be replaced by ==
 '''
-if __name__ != "__main__":
+if __name__ == "__main__":
 	#############################################################
 	#Main entrance of the script
 	#Author: Wei Tian, Wei.Tian@Schneider-Electric.com
@@ -271,19 +311,19 @@ if __name__ != "__main__":
 	https://www.paraview.org/ParaView/Doc/Nightly/www/py-doc/paraview.simple.LegacyVTKReader.html
 	'''
 	FilNam = ["result.vtk"]
-	My_Data = LegacyVTKReader(FileNames=FilNam)
+	my_Data = LegacyVTKReader(FileNames=FilNam)
 
 	'''
 	Display three D object
 	'''
-	Show(My_Data)
+	Show(my_Data)
 
 	'''
 	Cut surface for contours
 	'''
 	origin = [0.5, 0.5, 0.5]
 	normal = [0.0, 1.0, 0.0]
-	slice_1 = FFD.cut_slice(My_Data,origin, normal)
+	my_slice = FFD.cut_slice(my_Data,origin, normal)
 
 	'''
 	plot vectors
@@ -292,10 +332,11 @@ if __name__ != "__main__":
 	'''
 	plot streamlines
 	'''
-	FFD.plot_streamline(slice_1)
+	my_stream_trace = FFD.plot_streamline(my_slice)
 
 	'''
 	extract data along a line
 	'''
+	FFD.extract_line(my_slice,my_stream_trace)
 
 
