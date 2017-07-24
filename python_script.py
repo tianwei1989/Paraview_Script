@@ -64,7 +64,6 @@ def cut_slice(object,origin,normal):
         '''
         Get current view
         '''
-
         slice1Display = GetDisplayProperties(my_slice, view=view)
 	slice1Display.SetScalarBarVisibility(view, True)
 	#enable axis view
