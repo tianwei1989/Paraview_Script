@@ -1,6 +1,6 @@
 '''
 --------------------------------------------------------------------------------
-File Brief: the python code in this file is designed to automate the post-processing
+File Brief: the class FFD_Postprocess in this file is designed to automate the post-processing
 			of FFD results based on paraview. Some typical operations include: 
 			1)load data files, 
 			2)render active plottings, 
@@ -9,6 +9,10 @@ File Brief: the python code in this file is designed to automate the post-proces
 			5)save plottings
 			6)extract data from a line
 			7)save extracted data
+			8)*read the .cfd file to extract basic information about FFD simulations
+			9)*add units to the axies
+			10)*develop module to nondimensionlize the variables.
+			11)*arbitorily choose variable for each axis
 			
 Reference:  https://www.paraview.org/ParaView/Doc/Nightly/www/py-doc/paraview.simple.html
 			https://www.paraview.org/Wiki/ParaView_and_Python
