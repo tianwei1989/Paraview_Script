@@ -40,9 +40,14 @@ os.chdir("C:/Users/sesa461392/Desktop/Codes/Paraview-Script")
 #print (os.getcwd())
 class FFD_Postprocess(object):
 	def __init__(self):
+                #size of the geometry
+                Lx = 1.0
+                Ly = 1.0
+                Lz = 1.0
                 #size of screenshot for saving plottings
 		self.width = 936
 		self.height = 813
+		#streamlines
 		self.str_res = 200
 		self.str_len = 2
 		self.str_seed = [[0.0, 0.5, 0.0],[1.0, 0.5, 1.0]]
