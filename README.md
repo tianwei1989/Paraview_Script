@@ -9,9 +9,10 @@
 1. Load data module completed
 2. Cutting 2D surface module completed
 3. Plotting contour/streamline module completed
-3. Saving plotting module completed
+4. Saving plotting module completed
+5. Extracting a line from 2D plane module
+6. Save extracted data into csv module
 
 ## Under-Implementation
-1. Extracting a line from 2D plane module
-2. Save extracted data into csv module
-3. plotting vectors module
+1. Save plotting in a vectorized way
+2. plot vectors module
